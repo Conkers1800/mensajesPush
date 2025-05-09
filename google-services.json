@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "60872089285",
+    "project_id": "mensajepush-699cb",
+    "storage_bucket": "mensajepush-699cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60872089285:android:c8d204807d21546441daac",
+        "android_client_info": {
+          "package_name": "com.conkers.mensajespush"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY_dqg5WCJY25XTTaxX4QIqQjKIvOw4ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
