@@ -18,7 +18,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +34,7 @@ fun MainScreen() {
     // Estado para almacenar el token FCM
     var fcmToken by remember { mutableStateOf("Obteniendo token...") }
 
-    // Usamos LaunchedEffect para obtener el token cuando se componga la UI
+    // Obtener el token FCM al componer la UI
     LaunchedEffect(Unit) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -41,7 +48,6 @@ fun MainScreen() {
         }
     }
 
-    // Estructura simple con Scaffold y Column para mostrar el token
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,6 +71,31 @@ fun MainScreen() {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
+        }
+    }
+}
+
+
+
+@Composable
+fun RequestNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val context = LocalContext.current
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Log.w("Permiso", "No se concedió el permiso de notificaciones")
+            }
+        }
+
+        // Verificar si el permiso ya está concedido
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }
